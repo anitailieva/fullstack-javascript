@@ -22128,6 +22128,8 @@
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
 	      pageHeader: 'Naming Contests',
 	      contests: _this.props.initialContests
+	    }, _this.fetchContest = function (contestId) {
+	      pushState({ currentContestId: contestId }, '/contest/' + contestId);
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 	
@@ -22146,7 +22148,9 @@
 	        'div',
 	        { className: 'App' },
 	        _react2.default.createElement(_Header2.default, { message: this.state.pageHeader }),
-	        _react2.default.createElement(_ContestList2.default, { contests: this.state.contests })
+	        _react2.default.createElement(_ContestList2.default, {
+	          onContestClick: this.fetchContest,
+	          contests: this.state.contests })
 	      );
 	    }
 	  }]);
@@ -22217,18 +22221,23 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var ContestList = function ContestList(_ref) {
-	    var contests = _ref.contests;
+	    var contests = _ref.contests,
+	        onContestClick = _ref.onContestClick;
 	    return _react2.default.createElement(
 	        'div',
 	        { className: 'ContestList' },
 	        contests.map(function (contest) {
-	            return _react2.default.createElement(_ContestPreview2.default, _extends({ key: contest.id }, contest));
+	            return _react2.default.createElement(_ContestPreview2.default, _extends({
+	                key: contest.id,
+	                onClick: onContestClick
+	            }, contest));
 	        })
 	    );
 	};
 	
 	ContestList.propTypes = {
-	    contests: _react2.default.PropTypes.array
+	    contests: _react2.default.PropTypes.array,
+	    onContestClick: _react2.default.PropTypes.func.isRequired
 	};
 	
 	exports.default = ContestList;
@@ -22275,7 +22284,7 @@
 	        }
 	
 	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ContestPreview.__proto__ || Object.getPrototypeOf(ContestPreview)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function () {
-	            console.log(_this.props.contestName);
+	            _this.props.onClick(_this.props.id);
 	        }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 	
@@ -22302,7 +22311,11 @@
 	    return ContestPreview;
 	}(_react.Component);
 	
-	ContestPreview.propTypes = { categoryName: _react2.default.PropTypes.string.isRequired, contestName: _react2.default.PropTypes.string.isRequired
+	ContestPreview.propTypes = {
+	    id: _react2.default.PropTypes.number.isRequired,
+	    categoryName: _react2.default.PropTypes.string.isRequired,
+	    contestName: _react2.default.PropTypes.string.isRequired,
+	    onClick: _react2.default.PropTypes.func.isRequired
 	
 	};
 	
